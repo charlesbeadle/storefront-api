@@ -27,24 +27,29 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## Data Shapes
 
-#### Product
+#### Products
 
-- id
-- name
-- price
+- id: integer (primary key)
+- name: varchar(255)
+- price: numeric(5,2)
 - [OPTIONAL] category
 
-#### User
+#### Users
 
-- id
-- firstName
-- lastName
-- password
+- id: integer (primary key)
+- firstname: varchar(255)
+- lastname: varchar(255)
+- password: text
 
 #### Orders
 
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- id: integer (primary key)
+- user_id: integer references users (id)
+- status: varchar(10)
+
+#### Order_Products
+
+id: integer (primary key)
+order_id: integer references orders (id)
+product_id: integer references products (id)
+product_quantity: integer
