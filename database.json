@@ -3,7 +3,7 @@
 		"driver": "pg",
 		"host": "127.0.0.1",
 		"database": "storefront",
-		"user": "process.env.PG_USER",
-		"password": "process.env.PG_PASS"
+		"user": "udacity",
+		"password": "udacity"
 	}
 }

@@ -1,6 +1,6 @@
 CREATE TABLE
   IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    price NUMERIC(5, 2)
+    name VARCHAR(255) NOT NULL,
+    price NUMERIC(5, 2) NOT NULL
   );
