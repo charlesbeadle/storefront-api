@@ -1,7 +1,8 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import * as dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import { userRoutes } from './controllers/user';
 
 // Load environment variables from .env
 dotenv.config();
@@ -24,9 +25,8 @@ app.use(cors(corsOptions));
 // Use Body Parser middleware
 app.use(bodyParser.json());
 
-app.get('/', function (_req: Request, res: Response) {
-	res.send('Hello World!');
-});
+// Register user routes
+userRoutes(app);
 
 // Start the server
 app.listen(port, () => console.log(`app running on ${port}`));

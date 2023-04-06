@@ -28,8 +28,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const user_1 = require("./controllers/user");
 // Load environment variables from .env
 dotenv.config();
 // Create an express app instance
@@ -45,8 +46,7 @@ const port = process.env.PORT || 3000;
 app.use((0, cors_1.default)(corsOptions));
 // Use Body Parser middleware
 app.use(body_parser_1.default.json());
-app.get('/', function (_req, res) {
-    res.send('Hello World!');
-});
+// Register user routes
+(0, user_1.userRoutes)(app);
 // Start the server
 app.listen(port, () => console.log(`app running on ${port}`));
