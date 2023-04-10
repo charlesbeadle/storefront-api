@@ -45,7 +45,7 @@ const port = process.env.PORT || 3000;
 // Use CORS middleware
 app.use((0, cors_1.default)(corsOptions));
 // Use Body Parser middleware
-app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Register user routes
 (0, user_1.userRoutes)(app);
 // Start the server

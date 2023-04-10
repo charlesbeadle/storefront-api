@@ -15,16 +15,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const database_1 = __importDefault(require("../database"));
 class User {
-    constructor() { }
     index() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                console.log('connected');
+                const sql = 'select * from users';
+                const result = yield conn.query(sql);
                 conn.release();
+                return result.rows;
             }
             catch (err) {
-                console.log('connection failed');
+                throw new Error(`Failed to get users. Error: ${err}`);
+            }
+        });
+    }
+    show(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = 'select * from users where id=($1)';
+                const result = yield conn.query(sql, [id]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Failed to get user. Error: ${err}`);
+            }
+        });
+    }
+    create(u) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = 'insert into users (firstname, lastname, password) values ($1, $2, $3) returning *';
+                const result = yield conn.query(sql, [
+                    u.firstname,
+                    u.lastname,
+                    u.password,
+                ]);
+                const user = result.rows[0];
+                conn.release();
+                return user;
+            }
+            catch (err) {
+                throw new Error(`Failed to create user. Error: ${err}`);
             }
         });
     }
