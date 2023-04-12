@@ -29,7 +29,7 @@ const create = async (req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
 	try {
-		const user = await userInstance.show(req.body.id);
+		const user = await userInstance.show(req.params.id);
 		res.json(user);
 	} catch (err) {
 		res.json(err);

@@ -1,5 +1,5 @@
-import { UserType } from '../types/user';
 import Client from '../database';
+import { UserType } from '../types/user';
 
 export class User {
 	async index(): Promise<UserType[]> {

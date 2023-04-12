@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
-const user_1 = require("../models/user");
-const userInstance = new user_1.User();
-const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.orderRoutes = void 0;
+const order_1 = require("../models/order");
+const orderInstance = new order_1.Order();
+const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield userInstance.index();
-        res.json(users);
+        const order = yield orderInstance.show(req.params.uid);
+        res.json(order);
     }
     catch (err) {
         res.json(err);
@@ -23,30 +23,19 @@ const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userObj = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            password: req.body.password,
+        const orderObj = {
+            uid: req.body.uid,
+            status: req.body.status,
         };
-        const newUser = yield userInstance.create(userObj);
-        res.json(newUser);
+        const newOrder = yield orderInstance.create(orderObj);
+        res.json(newOrder);
     }
     catch (err) {
         res.json(err);
     }
 });
-const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield userInstance.show(req.params.id);
-        res.json(user);
-    }
-    catch (err) {
-        res.json(err);
-    }
-});
-const userRoutes = (app) => {
-    app.get('/users', index);
-    app.get('/users/:id', show);
-    app.post('/users', create);
+const orderRoutes = (app) => {
+    app.get('/orders/:uid', show);
+    app.post('/orders', create);
 };
-exports.userRoutes = userRoutes;
+exports.orderRoutes = orderRoutes;

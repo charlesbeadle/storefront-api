@@ -9,27 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
-const user_1 = require("../models/user");
-const userInstance = new user_1.User();
+exports.productRoutes = void 0;
+const product_1 = require("../models/product");
+const productInstance = new product_1.Product();
 const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield userInstance.index();
-        res.json(users);
-    }
-    catch (err) {
-        res.json(err);
-    }
-});
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userObj = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            password: req.body.password,
-        };
-        const newUser = yield userInstance.create(userObj);
-        res.json(newUser);
+        const products = yield productInstance.index();
+        res.json(products);
     }
     catch (err) {
         res.json(err);
@@ -37,16 +23,29 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield userInstance.show(req.params.id);
-        res.json(user);
+        const product = yield productInstance.show(req.params.id);
+        res.json(product);
     }
     catch (err) {
         res.json(err);
     }
 });
-const userRoutes = (app) => {
-    app.get('/users', index);
-    app.get('/users/:id', show);
-    app.post('/users', create);
+const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const productObj = {
+            name: req.body.name,
+            price: req.body.price,
+        };
+        const newProduct = yield productInstance.create(productObj);
+        res.json(newProduct);
+    }
+    catch (err) {
+        res.json(err);
+    }
+});
+const productRoutes = (app) => {
+    app.get('/products', index);
+    app.get('/products/:id', show);
+    app.post('/products', create);
 };
-exports.userRoutes = userRoutes;
+exports.productRoutes = productRoutes;

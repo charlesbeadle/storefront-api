@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { userRoutes } from './controllers/user';
+import { orderRoutes } from './controllers/order';
+import { productRoutes } from './controllers/product';
 
 // Load environment variables from .env
 dotenv.config();
@@ -27,6 +29,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Register user routes
 userRoutes(app);
+
+// Register product routes
+productRoutes(app);
+
+// Register order routes
+orderRoutes(app);
 
 // Start the server
 app.listen(port, () => console.log(`app running on ${port}`));
