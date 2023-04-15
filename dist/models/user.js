@@ -19,7 +19,7 @@ class User {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'select * from users';
+                const sql = 'SELECT * FROM users';
                 const result = yield conn.query(sql);
                 conn.release();
                 return result.rows;
@@ -33,7 +33,7 @@ class User {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'select * from users where id=($1)';
+                const sql = 'SELECT * FROM users WHERE id = $1';
                 const result = yield conn.query(sql, [id]);
                 conn.release();
                 return result.rows[0];
@@ -47,7 +47,7 @@ class User {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'insert into users (firstname, lastname, password) values ($1, $2, $3) returning *';
+                const sql = 'INSERT INTO users (firstname, lastname, password) VALUES ($1, $2, $3) RETURNING *';
                 const result = yield conn.query(sql, [
                     u.firstname,
                     u.lastname,

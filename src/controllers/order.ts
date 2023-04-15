@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { OrderType } from '../types/order';
 import { Order } from '../models/order';
+import { OrderExists } from '../errors/OrderExists';
 
 const orderInstance = new Order();
 
@@ -15,14 +15,21 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
 	try {
-		const orderObj: OrderType = {
+		const orderPayload = {
 			uid: req.body.uid,
-			status: req.body.status,
+			products: req.body.products,
 		};
-		const newOrder = await orderInstance.create(orderObj);
-		res.json(newOrder);
+		const order = await orderInstance.create(orderPayload);
+		res.json(order);
 	} catch (err) {
-		res.json(err);
+		if (err instanceof OrderExists) {
+			res.status(409);
+			res.json({
+				message: err.message,
+			});
+		} else {
+			res.json(err);
+		}
 	}
 };
 

@@ -1,42 +1,61 @@
 import Client from '../database';
-import { OrderType, OrderProducts } from '../types/order';
+import { OrderExists } from '../errors/OrderExists';
+import { OrderPayload, OrderProducts, OrderSummary } from '../types/order';
 
 export class Order {
 	async show(uid: string): Promise<OrderProducts> {
 		try {
 			const conn = await Client.connect();
 			const openOrderSql =
-				"SELECT * FROM orders WHERE user_id=$1 AND status='open'";
-			const { id: orderId, status } = (await conn.query(openOrderSql, [uid]))
-				.rows[0];
-
+				"SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+			const order = (await conn.query(openOrderSql, [uid])).rows[0];
 			const orderProductsSql = `
         SELECT p.name, p.price, op.product_quantity AS quantity
         FROM products p
         JOIN order_products op ON p.id = op.product_id
-        WHERE op.order_id=$1;
+        WHERE op.order_id = $1
       `;
-			const products = (await conn.query(orderProductsSql, [orderId])).rows;
-
+			const products = (await conn.query(orderProductsSql, [order.id])).rows;
 			conn.release();
-			return { status, products };
+			return {
+				status: order.status,
+				products: products,
+			};
 		} catch (err) {
 			throw new Error(`Failed to get order. Error: ${err}`);
 		}
 	}
 
-	// TEMP NOTE TO SELF: This should do two things. There should be an insertion into orders and into order_products
-	async create(o: OrderType): Promise<OrderType> {
+	async create(orderPayload: OrderPayload): Promise<OrderSummary> {
+		const { uid, products } = orderPayload;
 		try {
 			const conn = await Client.connect();
+			const orderExistsSql =
+				"SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+			const openOrderExists = await conn.query(orderExistsSql, [uid]);
+			if (openOrderExists.rowCount > 0) {
+				throw new OrderExists('An open order exists for this user');
+			}
 			const sql: string =
-				'insert into orders (user_id, status) values ($1, $2) returning *';
-			const result = await conn.query(sql, [o.uid, o.status]);
-			const order = result.rows[0];
+				"INSERT INTO orders (user_id, status) VALUES ($1, 'open') RETURNING *";
+			const order = (await conn.query(sql, [uid])).rows[0];
+			const orderProductsSql =
+				'INSERT INTO order_products (order_id, product_id, product_quantity) VALUES ($1, $2, $3) RETURNING *';
+			const orderProducts = [];
+			for (let product of products) {
+				const { id: product_id, quantity } = product;
+				const orderProduct = (
+					await conn.query(orderProductsSql, [order.id, product_id, quantity])
+				).rows[0];
+				orderProducts.push(orderProduct);
+			}
 			conn.release();
-			return order;
+			return {
+				order: { ...order },
+				products: orderProducts,
+			};
 		} catch (err) {
-			throw new Error(`Failed to create order. Error: ${err}`);
+			throw err;
 		}
 	}
 }

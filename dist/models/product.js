@@ -19,7 +19,7 @@ class Product {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'select * from products';
+                const sql = 'SELECT * FROM products';
                 const result = yield conn.query(sql);
                 conn.release();
                 return result.rows;
@@ -33,7 +33,7 @@ class Product {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'select * from products where id=($1)';
+                const sql = 'SELECT * FROM products WHERE id = $1';
                 const result = yield conn.query(sql, [id]);
                 conn.release();
                 return result.rows[0];
@@ -47,7 +47,7 @@ class Product {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'insert into products (name, price) values ($1, $2) returning *';
+                const sql = 'INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *';
                 const result = yield conn.query(sql, [u.name, u.price]);
                 const product = result.rows[0];
                 conn.release();
