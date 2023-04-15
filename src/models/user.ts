@@ -1,5 +1,6 @@
 import Client from '../database';
 import { UserType } from '../types/user';
+import { hashPassword } from '../utilities/hashPassword';
 
 export class User {
 	async index(): Promise<UserType[]> {
@@ -44,7 +45,7 @@ export class User {
 			const result = await conn.query(sql, [
 				u.firstname,
 				u.lastname,
-				u.password,
+				hashPassword(u.password),
 			]);
 
 			const user = result.rows[0];

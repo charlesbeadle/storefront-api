@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const database_1 = __importDefault(require("../database"));
+const hashPassword_1 = require("../utilities/hashPassword");
 class User {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -51,7 +52,7 @@ class User {
                 const result = yield conn.query(sql, [
                     u.firstname,
                     u.lastname,
-                    u.password,
+                    (0, hashPassword_1.hashPassword)(u.password),
                 ]);
                 const user = result.rows[0];
                 conn.release();
