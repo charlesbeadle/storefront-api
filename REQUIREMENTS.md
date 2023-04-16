@@ -43,13 +43,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Orders
 
-- id: integer (primary key)
-- user_id: integer references users (id)
-- status: varchar(10)
-
-#### Order_Products
-
-id: integer (primary key)
-order_id: integer references orders (id)
-product_id: integer references products (id)
-product_quantity: integer
+- id
+- status of order (active or complete)
+- user_id
+- id of each product in the order
+- quantity of each product in the order

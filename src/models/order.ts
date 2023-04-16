@@ -7,18 +7,24 @@ export class Order {
 		try {
 			const conn = await Client.connect();
 			const openOrderSql =
-				"SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+				"SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
 			const order = (await conn.query(openOrderSql, [uid])).rows[0];
 			const orderProductsSql = `
-        SELECT p.name, p.price, op.product_quantity AS quantity
-        FROM products p
+      SELECT
+        p.id,
+        op.product_quantity AS quantity
+      FROM
+        products p
         JOIN order_products op ON p.id = op.product_id
-        WHERE op.order_id = $1
+      WHERE
+        op.order_id = $1;
       `;
 			const products = (await conn.query(orderProductsSql, [order.id])).rows;
 			conn.release();
 			return {
+				id: order.id,
 				status: order.status,
+				user_id: order.user_id,
 				products: products,
 			};
 		} catch (err) {
@@ -31,13 +37,13 @@ export class Order {
 		try {
 			const conn = await Client.connect();
 			const orderExistsSql =
-				"SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+				"SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
 			const openOrderExists = await conn.query(orderExistsSql, [uid]);
 			if (openOrderExists.rowCount > 0) {
 				throw new OrderExists('An open order exists for this user');
 			}
 			const sql: string =
-				"INSERT INTO orders (user_id, status) VALUES ($1, 'open') RETURNING *";
+				"INSERT INTO orders (user_id, status) VALUES ($1, 'active') RETURNING *";
 			const order = (await conn.query(sql, [uid])).rows[0];
 			const orderProductsSql =
 				'INSERT INTO order_products (order_id, product_id, product_quantity) VALUES ($1, $2, $3) RETURNING *';

@@ -11,7 +11,9 @@ export type OrderPayload = {
 };
 
 export type OrderProducts = {
+	id: number;
 	status: string;
+	user_id: number;
 	products: CartItem[];
 };
 

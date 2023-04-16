@@ -1,5 +1,4 @@
 Need to:
 
-1. Make sure that server responses match the shapes in requirements.md
-2. Add web tokens
-3. Add tests
+1. Add web tokens
+2. Add tests

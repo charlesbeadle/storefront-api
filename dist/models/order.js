@@ -20,18 +20,24 @@ class Order {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const openOrderSql = "SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+                const openOrderSql = "SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
                 const order = (yield conn.query(openOrderSql, [uid])).rows[0];
                 const orderProductsSql = `
-        SELECT p.name, p.price, op.product_quantity AS quantity
-        FROM products p
+      SELECT
+        p.id,
+        op.product_quantity AS quantity
+      FROM
+        products p
         JOIN order_products op ON p.id = op.product_id
-        WHERE op.order_id = $1
+      WHERE
+        op.order_id = $1;
       `;
                 const products = (yield conn.query(orderProductsSql, [order.id])).rows;
                 conn.release();
                 return {
+                    id: order.id,
                     status: order.status,
+                    user_id: order.user_id,
                     products: products,
                 };
             }
@@ -45,12 +51,12 @@ class Order {
             const { uid, products } = orderPayload;
             try {
                 const conn = yield database_1.default.connect();
-                const orderExistsSql = "SELECT * FROM orders WHERE user_id = $1 AND status = 'open'";
+                const orderExistsSql = "SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
                 const openOrderExists = yield conn.query(orderExistsSql, [uid]);
                 if (openOrderExists.rowCount > 0) {
                     throw new OrderExists_1.OrderExists('An open order exists for this user');
                 }
-                const sql = "INSERT INTO orders (user_id, status) VALUES ($1, 'open') RETURNING *";
+                const sql = "INSERT INTO orders (user_id, status) VALUES ($1, 'active') RETURNING *";
                 const order = (yield conn.query(sql, [uid])).rows[0];
                 const orderProductsSql = 'INSERT INTO order_products (order_id, product_id, product_quantity) VALUES ($1, $2, $3) RETURNING *';
                 const orderProducts = [];
