@@ -1,51 +1,43 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productRoutes = void 0;
+const verifyAuthToken_1 = require("../middleware/verifyAuthToken");
 const product_1 = require("../models/product");
 const productInstance = new product_1.Product();
-const index = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const index = async (_req, res) => {
     try {
-        const products = yield productInstance.index();
+        const products = await productInstance.index();
         res.json(products);
     }
     catch (err) {
         res.json(err);
     }
-});
-const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const show = async (req, res) => {
     try {
-        const product = yield productInstance.show(req.params.id);
+        const product = await productInstance.show(req.params.id);
         res.json(product);
     }
     catch (err) {
         res.json(err);
     }
-});
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const create = async (req, res) => {
     try {
         const productObj = {
             name: req.body.name,
             price: req.body.price,
         };
-        const newProduct = yield productInstance.create(productObj);
+        const newProduct = await productInstance.create(productObj);
         res.json(newProduct);
     }
     catch (err) {
         res.json(err);
     }
-});
+};
 const productRoutes = (app) => {
     app.get('/products', index);
     app.get('/products/:id', show);
-    app.post('/products', create);
+    app.post('/products', verifyAuthToken_1.verifyAuthToken, create);
 };
 exports.productRoutes = productRoutes;

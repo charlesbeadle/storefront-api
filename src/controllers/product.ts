@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { verifyAuthToken } from '../middleware/verifyAuthToken';
 import { ProductType } from '../types/product';
 import { Product } from '../models/product';
 
@@ -38,5 +39,5 @@ const create = async (req: Request, res: Response) => {
 export const productRoutes = (app: express.Application) => {
 	app.get('/products', index);
 	app.get('/products/:id', show);
-	app.post('/products', create);
+	app.post('/products', verifyAuthToken, create);
 };

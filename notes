@@ -1,4 +1,4 @@
 Need to:
 
-1. Add web tokens
-2. Add tests
+1. Add tests and confirm test return expected data shapes
+2. Write read me

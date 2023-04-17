@@ -47,7 +47,8 @@ const port = process.env.PORT || 3000;
 // Use CORS middleware
 app.use((0, cors_1.default)(corsOptions));
 // Use Body Parser middleware
-app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(body_parser_1.default.urlencoded({ extended: false }));
+app.use(body_parser_1.default.json());
 // Register user routes
 (0, user_1.userRoutes)(app);
 // Register product routes
@@ -55,4 +56,5 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Register order routes
 (0, order_1.orderRoutes)(app);
 // Start the server
-app.listen(port, () => console.log(`app running on ${port}`));
+app.listen(port);
+exports.default = app;

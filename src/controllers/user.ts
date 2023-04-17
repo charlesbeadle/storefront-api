@@ -1,6 +1,14 @@
 import express, { Request, Response } from 'express';
+import { verifyAuthToken } from '../middleware/verifyAuthToken';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import { UserType } from '../types/user';
 import { User } from '../models/user';
+
+dotenv.config();
+
+const { TOKEN_SECRET } = process.env;
+const secret = TOKEN_SECRET as string;
 
 const userInstance = new User();
 
@@ -21,7 +29,7 @@ const create = async (req: Request, res: Response) => {
 			password: req.body.password,
 		};
 		const newUser = await userInstance.create(userObj);
-		res.json(newUser);
+		res.json({ token: jwt.sign({ newUser }, secret) });
 	} catch (err) {
 		res.json(err);
 	}
@@ -37,7 +45,7 @@ const show = async (req: Request, res: Response) => {
 };
 
 export const userRoutes = (app: express.Application) => {
-	app.get('/users', index);
-	app.get('/users/:id', show);
+	app.get('/users', verifyAuthToken, index);
+	app.get('/users/:id', verifyAuthToken, show);
 	app.post('/users', create);
 };

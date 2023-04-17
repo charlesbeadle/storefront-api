@@ -11,8 +11,6 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Index '/products' [GET]
 - Show '/products/:id' [GET]
 - Create [token required] '/products' [POST]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
 
 #### Users
 
@@ -23,28 +21,26 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Orders
 
 - Current Order by user (args: user id)[token required] '/orders/:id' [GET]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
 ## Data Shapes
 
 #### Products
 
-- id: integer (primary key)
-- name: varchar(255)
-- price: numeric(5,2)
-- [OPTIONAL] category
+- id: SERIAL PRIMARY KEY
+- name: VARCHAR(255) NOT NULL
+- price: NUMERIC(6, 2) NOT NULL
 
 #### Users
 
-- id: integer (primary key)
-- firstname: varchar(255)
-- lastname: varchar(255)
-- password: text
+- id: SERIAL PRIMARY KEY
+- firstname: VARCHAR(255) NOT NULL
+- lastname: VARCHAR(255) NOT NULL
+- password: text NOT NULL
 
 #### Orders
 
-- id
-- status of order (active or complete)
-- user_id
-- id of each product in the order
-- quantity of each product in the order
+- id: SERIAL PRIMARY KEY (orders table)
+- status of order (active or complete): VARCHAR(10) NOT NULL (orders table)
+- user_id: INTEGER REFERENCES users (id) NOT NULL (orders table)
+- id of each product in the order: SERIAL PRIMARY KEY (products table)
+- quantity of each product in the order: INTEGER NOT NULL (order_products table)

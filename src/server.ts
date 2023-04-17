@@ -1,5 +1,5 @@
 import express from 'express';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { userRoutes } from './controllers/user';
@@ -25,7 +25,8 @@ const port = process.env.PORT || 3000;
 app.use(cors(corsOptions));
 
 // Use Body Parser middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Register user routes
 userRoutes(app);
@@ -37,4 +38,6 @@ productRoutes(app);
 orderRoutes(app);
 
 // Start the server
-app.listen(port, () => console.log(`app running on ${port}`));
+app.listen(port);
+
+export default app;

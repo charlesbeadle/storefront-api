@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { verifyAuthToken } from '../middleware/verifyAuthToken';
 import { Order } from '../models/order';
 import { OrderExists } from '../errors/OrderExists';
 
@@ -34,6 +35,6 @@ const create = async (req: Request, res: Response) => {
 };
 
 export const orderRoutes = (app: express.Application) => {
-	app.get('/orders/:uid', show);
+	app.get('/orders/:uid', verifyAuthToken, show);
 	app.post('/orders', create);
 };
