@@ -17,19 +17,19 @@ app.use(body_parser_1.default.json());
 describe('User Routes', () => {
     const testUserId = '1';
     const mockToken = jsonwebtoken_1.default.sign(testUserId, secret);
-    it('Gets a 200 response from the index endpoint when a token is set', async () => {
+    it('Gets a 200 response from the index endpoint when a token is set [GET]', async () => {
         const response = await request
             .get('/users')
             .set('Authorization', 'bearer ' + mockToken);
         expect(response.status).toBe(200);
     });
-    it('Gets a 200 response from the show endpoint when a token is set', async () => {
+    it('Gets a 200 response from the show endpoint when a token is set [GET]', async () => {
         const response = await request
             .get(`/users/${testUserId}`)
             .set('Authorization', 'bearer ' + mockToken);
         expect(response.status).toBe(200);
     });
-    it('Gets a valid jwt and a 200 response from the create endpoint', async () => {
+    it('Gets a valid jwt and a 200 response from the create endpoint [POST]', async () => {
         const mockUser = {
             firstname: 'Harold',
             lastname: 'Finch',

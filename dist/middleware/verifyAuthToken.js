@@ -18,7 +18,7 @@ const verifyAuthToken = (req, res, next) => {
         jsonwebtoken_1.default.verify(token, secret);
         next();
     }
-    catch (error) {
+    catch (err) {
         res.status(401);
         res.json({ message: 'Unauthorized' });
     }
