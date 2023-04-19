@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import { productRoutes } from '../../controllers/product';
 import { ProductType } from '../../types/product';
+import client from '../../database';
 
 const app: express.Application = express();
 const { TOKEN_SECRET: secret } = process.env;
@@ -13,6 +14,12 @@ app.use(bodyParser.json());
 productRoutes(app);
 
 describe('Product Routes', () => {
+	afterAll(async () => {
+		const conn = await client.connect();
+		const sql = "DELETE FROM products WHERE name = 'Squatty Potty'";
+		await conn.query(sql);
+	});
+
 	const testId = '1';
 
 	const mockToken = jwt.sign(testId, secret as string);

@@ -8,6 +8,7 @@ const supertest_1 = __importDefault(require("supertest"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const product_1 = require("../../controllers/product");
+const database_1 = __importDefault(require("../../database"));
 const app = (0, express_1.default)();
 const { TOKEN_SECRET: secret } = process.env;
 const request = (0, supertest_1.default)(app);
@@ -15,6 +16,11 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
 (0, product_1.productRoutes)(app);
 describe('Product Routes', () => {
+    afterAll(async () => {
+        const conn = await database_1.default.connect();
+        const sql = "DELETE FROM products WHERE name = 'Squatty Potty'";
+        await conn.query(sql);
+    });
     const testId = '1';
     const mockToken = jsonwebtoken_1.default.sign(testId, secret);
     it('Gets a 200 response from the index endpoint [GET]', async () => {
