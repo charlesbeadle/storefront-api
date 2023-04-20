@@ -16,7 +16,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 - Index [token required] '/users' [GET]
 - Show [token required] '/users/:id' [GET]
-- Create N[token required] '/users' [POST]
+- Create '/users' [POST]
 
 #### Orders
 

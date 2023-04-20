@@ -1,11 +1,11 @@
-import Client from '../database';
+import client from '../database';
 import { OrderExists } from '../errors/OrderExists';
 import { OrderPayload, OrderProducts, OrderSummary } from '../types/order';
 
 export class Order {
 	async show(uid: string): Promise<OrderProducts> {
 		try {
-			const conn = await Client.connect();
+			const conn = await client.connect();
 			const openOrderSql =
 				"SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
 			const order = (await conn.query(openOrderSql, [uid])).rows[0];
@@ -35,7 +35,7 @@ export class Order {
 	async create(orderPayload: OrderPayload): Promise<OrderSummary> {
 		const { uid, products } = orderPayload;
 		try {
-			const conn = await Client.connect();
+			const conn = await client.connect();
 			const orderExistsSql =
 				"SELECT * FROM orders WHERE user_id = $1 AND status = 'active'";
 			const openOrderExists = await conn.query(orderExistsSql, [uid]);
@@ -43,8 +43,8 @@ export class Order {
 				throw new OrderExists('An open order exists for this user');
 			}
 			const sql: string =
-				"INSERT INTO orders (user_id, status) VALUES ($1, 'active') RETURNING *";
-			const order = (await conn.query(sql, [uid])).rows[0];
+				'INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *';
+			const order = (await conn.query(sql, [uid, 'active'])).rows[0];
 			const orderProductsSql =
 				'INSERT INTO order_products (order_id, product_id, product_quantity) VALUES ($1, $2, $3) RETURNING *';
 			const orderProducts = [];

@@ -16,11 +16,10 @@ const show = async (req, res) => {
 };
 const create = async (req, res) => {
     try {
-        const orderPayload = {
+        const order = await orderInstance.create({
             uid: req.body.uid,
             products: req.body.products,
-        };
-        const order = await orderInstance.create(orderPayload);
+        });
         res.json(order);
     }
     catch (err) {

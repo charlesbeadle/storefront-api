@@ -44,8 +44,8 @@ class Order {
             if (openOrderExists.rowCount > 0) {
                 throw new OrderExists_1.OrderExists('An open order exists for this user');
             }
-            const sql = "INSERT INTO orders (user_id, status) VALUES ($1, 'active') RETURNING *";
-            const order = (await conn.query(sql, [uid])).rows[0];
+            const sql = 'INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *';
+            const order = (await conn.query(sql, [uid, 'active'])).rows[0];
             const orderProductsSql = 'INSERT INTO order_products (order_id, product_id, product_quantity) VALUES ($1, $2, $3) RETURNING *';
             const orderProducts = [];
             for (let product of products) {
