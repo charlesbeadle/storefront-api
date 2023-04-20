@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRoutes = void 0;
 const verifyAuthToken_1 = require("../middleware/verifyAuthToken");
+const user_1 = require("../models/user");
 const dotenv_1 = __importDefault(require("dotenv"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = require("../models/user");
 dotenv_1.default.config();
 const { TOKEN_SECRET } = process.env;
 const secret = TOKEN_SECRET;
