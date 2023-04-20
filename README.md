@@ -30,6 +30,8 @@ Start the application server.
 
 `npm run start`
 
+By default, the server runs on port 3000.
+
 ## Additional Scripts
 
 Tests
