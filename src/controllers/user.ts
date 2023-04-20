@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { verifyAuthToken } from '../middleware/verifyAuthToken';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
 import { UserType } from '../types/user';
 import { User } from '../models/user';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
