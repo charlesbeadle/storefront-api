@@ -72,6 +72,8 @@ A token is required. In Postman, the token can be added under Headers. Key: Auth
 
 Select the "raw" radio button to be able to paste the JSON in the text area.
 
+In the example below, *uid* represents a user id. Within products, the id is a product id.
+
 `{
     "uid": "1",
     "products": [
