@@ -18,13 +18,15 @@ page.
 4. Change directories to the root of the project and install the packages by running:
    `npm install`
 
-5. Rename the ".env.example" file to ".env".
+5. Build the project. `npm run build`
+
+6. Rename the ".env.example" file to ".env".
    If you are using a database, user, password etc that differ from what's included in the env file, then be sure to make changes there, and in the database.json file.
 
-6. Run the database migrations.
+7. Run the database migrations.
    `db-migrate up`
 
-7. Start the application server.
+8. Start the application server.
    `npm run start`   
    By default, the server runs on port 3000.
 
