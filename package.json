@@ -5,6 +5,7 @@
 	"main": "server.ts",
 	"scripts": {
 		"start": "node dist/server.js",
+    "build": "tsc",
 		"watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
 		"test": "jasmine",
 		"tsc": "tsc"

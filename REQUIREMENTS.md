@@ -26,21 +26,34 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Products
 
-- id: SERIAL PRIMARY KEY
-- name: VARCHAR(255) NOT NULL
-- price: NUMERIC(6, 2) NOT NULL
+- id
+- name
+- price 
 
 #### Users
 
-- id: SERIAL PRIMARY KEY
-- firstname: VARCHAR(255) NOT NULL
-- lastname: VARCHAR(255) NOT NULL
-- password: text NOT NULL
+- id
+- firstname 
+- lastname 
+- password
 
 #### Orders
 
-- id: SERIAL PRIMARY KEY (orders table)
-- status of order (active or complete): VARCHAR(10) NOT NULL (orders table)
-- user_id: INTEGER REFERENCES users (id) NOT NULL (orders table)
-- id of each product in the order: SERIAL PRIMARY KEY (products table)
-- quantity of each product in the order: INTEGER NOT NULL (order_products table)
+- id
+- user_id
+- status of order (active or complete)
+- id of each product in the order
+- quantity of each product in the order
+
+### Database Schemas
+
+Table: products (id:integer [primary key], name:varchar(255), price:numeric(6,2))
+
+Table: users (id:integer [primary key], firstname:varchar(255), lastname:varchar(255), password:text)
+
+Table: orders (id:integer [primary key], user_id:integer [foreign key references users(id)], status:varchar(10))
+
+Table: order_products (id:integer [primary key], order_id:integer [foreign key references orders(id)], product_id:integer [foreign key references products(id)], product_quantity: integer)
+
+
+
